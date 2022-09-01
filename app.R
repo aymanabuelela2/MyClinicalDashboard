@@ -6,7 +6,7 @@ source("./mypage.R")
 # UI
 ui <- mypage
 
-### test clou
+### test cloud
 
 # Server
 server <- function(input, output) {
