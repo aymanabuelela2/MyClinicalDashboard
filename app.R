@@ -5,8 +5,7 @@ source("./mypage.R")
 
 # UI
 ui <- mypage
-# test local commit
-# test cloud commit
+
 
 # Server
 server <- function(input, output) {
