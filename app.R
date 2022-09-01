@@ -6,6 +6,8 @@ source("./mypage.R")
 # UI
 ui <- mypage
 
+### test cloud
+
 # Server
 server <- function(input, output) {
     ## Prescribe servers
