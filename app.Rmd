@@ -1,0 +1,14 @@
+---
+title: ""
+output: html_document
+---
+
+**'My Clinical Dashboard'** is an interactive interface for documentation 
+of daily clinical services in community pharmacy settings.
+            
+The Dashboard has **4 modules** that cover the most common clinical activities in community pharmacy in Alberta. The 4 modules are `ClinDoc-Prescribe`, `ClinDoc-MedRev`, `ClinDoc-Travel` and `ClinDoc-FollowUp`.
+
+---
+
+**`ClinDoc-Prescribe`** is a module for the comprehensive assessment and
+documentation of the most common minor ailments in community pharmacy settings. The module covers assessment of condition-related medical history, medication history, clinical presentation and red flags. Additionally, it helps the prescriber discuss the goals of therapy with the patient and set up a monitoring and follow up plan. The module is equipped with handy functions to facilitate the prescribing, documentation and collaboration duties such as **'Generate Rx'**, **'Export DAP note'** and **'Generate Dr letter'**.
