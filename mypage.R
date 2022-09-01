@@ -94,3 +94,14 @@ mypage <- dashboardPage(
         )
     )
 )
+
+myserver <- function(input, output) {
+    ## Prescribe servers
+    uti_server(input, output)
+    
+    ## MedRev servers
+    
+    ## Travel servers
+    
+    ## FU servers
+}

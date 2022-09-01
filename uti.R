@@ -96,12 +96,36 @@ uti_ui <- conditionalPanel(
             ),
             
             ## symptoms presentation
-            tabPanel("Clinical Presentation"),
+            tabPanel(
+                "Clinical Presentation",
+                radioButtons(
+                    width = '800px',
+                    "uti_sxs",
+                    "Does the patient have two or more of the following:",
+                    c("Dysuria", "Frequency/Urgency", "Suprapubic disccomfort", "No vaginal symptoms")
+                )
+            ),
             
             ## Red flags and contraindications
-            tabPanel("Red flags")
+            tabPanel(
+                "Red flags",
+                
+                radioButtons(
+                    width = '800px',
+                    "uti-pyelo",
+                    "Are any signs of pyelonephritis present?",
+                    c("Fever", "Chills", "Nausea and vomiting", "Flank or Back pain", "Significant malaise")
+                ),
+                radioButtons(
+                    width = '800px',
+                    "uti_othersxs",
+                    "Are any other unusual symptoms present?",
+                    c("Vaginal discharge or itch", "Dyspareunia", "Other significan symptoms")
+                )
+            )
         )
     ),
+    
     fluidRow(
         
         # GOT
@@ -110,7 +134,21 @@ uti_ui <- conditionalPanel(
             title = "Goals of Therapy",
             status = "primary", 
             solidHeader = TRUE,
-            collapsible = TRUE
+            collapsible = TRUE,
+            checkboxGroupInput(
+                "uti_got",
+                "I discussed with the patient the following:",
+                c(
+                    "Relieve symptoms in acute infection",
+                    "Prevent complications of untreated acute infection",
+                    "Prevent recurrent infection",
+                    "Prevent pyelonephritis in pregnancy"
+                )
+            ),
+                textAreaInput(width = '800px',
+                              "uti_addgot",
+                              "Additional Notes: "
+                )
         ),
         
         # ttt
@@ -121,7 +159,21 @@ uti_ui <- conditionalPanel(
             
             # Non-pharm
             tabPanel(
-                title = "Non-Pharmacologic"
+                title = "Non-Pharmacologic",
+                checkboxGroupInput(
+                    width = '800px',
+                    "uti_nonpharm",
+                    "I discussed the following with the patient:",
+                    c(
+                        "increased water intake may decrease the risk of UTI recurrence (low quality evidence)",
+                        "The use of spermicidal products is associated with recurrent UTI in women and should be avoided in those at risk of recurrence."
+                    )
+                ),
+                    textAreaInput(
+                        width = '800px',
+                        "uti_addnonpharm",
+                        "Additional Notes: "
+                )
             ),
             
             # Pharm
@@ -139,6 +191,7 @@ uti_ui <- conditionalPanel(
             )
         )
     ),
+    
     fluidRow(
         
         # FU
