@@ -76,12 +76,12 @@ uti_ui <- conditionalPanel(
                 radioButtons(width = '800px',
                              "uti_immunosuppressors",
                              "Does the patient take a medication which supresses the immune system?",
-                             c("Yes", "No")
+                             c("Yes", "No"), selected = "No"
                 ),
                 radioButtons(width = '800px',
                              "uti_cysititisMed",
                              "Does the patient take a medication which can cause cyctitis? (cyclophosphamide, allopurinol, tiaprofenic acid)",
-                             c("Yes", "No")
+                             c("Yes", "No"), selected = "No"
                 ),
                 selectizeInput(
                     inputId = "uti_allergies",
@@ -249,6 +249,8 @@ uti_ui <- conditionalPanel(
                 textOutput("uti_addhx"),
                 
                 h5("*Medication hitory:"),
+                textOutput("uti_immunosupressors"),
+                textOutput("uti_cysititisMed"),
                 
                 h5("Prior treatment for UTI: "),
                 
@@ -351,7 +353,20 @@ uti_server <- function(input, output) {
     })
     
     ## Medication hx
-    
+    output$uti_immunosupressors <- renderText({
+        if (input$uti_immunosuppressors == "Yes") {
+            paste0("- The patient is on immunosupressant medication--REFER")
+        } else {
+            paste0("- Patient is NOT on immunosuppresant medication.")
+        }
+    })
+    output$uti_cysititisMed <- renderText({
+        if (input$uti_cysititisMed == "Yes") {
+            paste0("- Patient is on cystitis-inducing medication--REFER")
+        } else {
+            paste0("- Patient is NOT on cystititis-induding medication.")
+        }
+    })
     
     # DAP Assessment
     
