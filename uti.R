@@ -91,8 +91,8 @@ uti_ui <- conditionalPanel(
                 ),
                 h4("Prior treatment for UTI:"),
                 selectizeInput("uti_prior","Medication", choices = NULL),
-                textInput("uti_effect", "Effect"),
-                textInput("uti_tolerance", "Tolerance")
+                textInput("uti_effect", "Effect", placeholder = "Effective/Not effective"),
+                textInput("uti_tolerance", "Tolerance", placeholder = "Tolerable/Not tolerable")
             ),
             
             ## symptoms presentation
@@ -102,7 +102,7 @@ uti_ui <- conditionalPanel(
                     width = '800px',
                     "uti_sxs",
                     "Does the patient have two or more of the following:",
-                    c("Dysuria", "Frequency/Urgency", "Suprapubic disccomfort", "No vaginal symptoms")
+                    c("Dysuria", "Frequency/Urgency", "Suprapubic disccomfort", "No vaginal symptoms", "None")
                 )
             ),
             
@@ -114,13 +114,13 @@ uti_ui <- conditionalPanel(
                     width = '800px',
                     "uti-pyelo",
                     "Are any signs of pyelonephritis present?",
-                    c("Fever", "Chills", "Nausea and vomiting", "Flank or Back pain", "Significant malaise")
+                    c("Fever", "Chills", "Nausea and vomiting", "Flank or Back pain", "Significant malaise", "None")
                 ),
                 radioButtons(
                     width = '800px',
                     "uti_othersxs",
                     "Are any other unusual symptoms present?",
-                    c("Vaginal discharge or itch", "Dyspareunia", "Other significan symptoms")
+                    c("Vaginal discharge or itch", "Dyspareunia", "Other significan symptoms", "None")
                 )
             )
         )
@@ -200,7 +200,29 @@ uti_ui <- conditionalPanel(
             title = "Monitoring & Follow up Plan",
             status = "primary",
             solidHeader = TRUE,
-            collapsible = TRUE
+            collapsible = TRUE,
+            fluidRow(
+                column(width = 5, numericInput("uti_fuSchedule", "Follow up in ", value = 3, min = 0, max = 99)),
+                column(width = 3, selectInput("uti_fuUOT", "_", c("minutes", "hours", "days", "weeks", "months"), selected = "days")),
+                column(
+                    width = 4, 
+                    selectInput(
+                        "uti_fuMeans",
+                        "By: ",
+                        c("In-peson", "By phone")
+                    )
+                )
+            ),
+            checkboxGroupInput(
+                "uti_fuItems",
+                "I will follow up with the patient on the following:",
+                c(
+                    "Assess for significant improvement in all symptoms",
+                    "Determine if side effects are occurring (esp. severe diarrhea or rash)",
+                    "If worsening or not improving, refer to MD",
+                    "If improving, encourage continued use until the end of therapy if greater than 3 days"
+                )
+            )
         ),
         
         # DAP & Dr Letter
@@ -285,7 +307,8 @@ uti_server <- function(input, output) {
     updateSelectizeInput(
         inputId = "uti_prior",
         choices = drugs,
-        server = TRUE
+        server = TRUE,
+        selected = "PMS-NITROFURANTOIN BID"
     )
     
     # Rx
