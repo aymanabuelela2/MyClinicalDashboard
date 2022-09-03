@@ -1,5 +1,0 @@
----
-title: ""
-output: html_document
----
-[Guidelines for Empiric Treatment of UTI in Adults](./empiricUTI.pdf)

@@ -1,5 +1,5 @@
 load("./drugs.Rds")
-source("./Rx.R")
+source("./Rx/Rx.R")
 source("./patient.R")
 
 uti_ui <- conditionalPanel(
@@ -143,7 +143,7 @@ uti_ui <- conditionalPanel(
             ## Resources
             tabPanel(
                 "Resources",
-                includeMarkdown("./uti_resources.Rmd")
+                includeMarkdown("./uti/uti_resources.Rmd")
             )
             
         )
