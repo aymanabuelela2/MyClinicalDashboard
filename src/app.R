@@ -15,6 +15,6 @@ shinyApp(ui = ui, server = server)
 
 # To do:
 ## UTI resources panel
-## DAP note textoutput
+## DAP note text output
 ## DAP note HTML Report
 ## Dr letter
