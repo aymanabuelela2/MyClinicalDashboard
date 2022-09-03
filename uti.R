@@ -122,7 +122,30 @@ uti_ui <- conditionalPanel(
                     "Are any other unusual symptoms present?",
                     c("Vaginal discharge or itch", "Dyspareunia", "Other significan symptoms", "None")
                 )
+            ),
+            
+            ## Assessment
+            tabPanel(
+                "Assessment",
+                radioButtons(
+                    width = '800px',
+                    "uti_assessment",
+                    "According to the patient's clinical presentation, I decided to:",
+                    c("Treat", "Refer"), selected = "Treat"
+                ),
+                textAreaInput(
+                    width = '800px',
+                    "uti_rationale",
+                    "Rationale"
+                )
+            ),
+            
+            ## Resources
+            tabPanel(
+                "Resources",
+                includeMarkdown("./uti_resources.Rmd")
             )
+            
         )
     ),
     
@@ -367,6 +390,10 @@ uti_server <- function(input, output) {
             paste0("- Patient is NOT on cystititis-induding medication.")
         }
     })
+    
+    ## Clinical presentation
+    
+    ## Red Flags
     
     # DAP Assessment
     
