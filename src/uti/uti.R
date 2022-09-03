@@ -145,7 +145,6 @@ uti_ui <- conditionalPanel(
                 "Resources",
                 includeMarkdown("./uti/uti_resources.Rmd")
             )
-            
         )
     ),
     
