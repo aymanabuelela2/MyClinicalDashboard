@@ -105,7 +105,4 @@ myserver <- function(input, output) {
     
     ## FU servers
     
-    ## add  
-    shiny::addResourcePath("src/ext_files", here::here("src/ext_files"))
-    
 }
