@@ -98,11 +98,11 @@ uti_ui <- conditionalPanel(
             ## symptoms presentation
             tabPanel(
                 "Clinical Presentation",
-                radioButtons(
+                checkboxGroupInput(
                     width = '800px',
                     "uti_sxs",
                     "Does the patient have two or more of the following:",
-                    c("Dysuria", "Frequency/Urgency", "Suprapubic disccomfort", "No vaginal symptoms", "None")
+                    c("Dysuria", "Frequency/Urgency", "Suprapubic disccomfort", "No vaginal symptoms")
                 )
             ),
             
@@ -110,17 +110,17 @@ uti_ui <- conditionalPanel(
             tabPanel(
                 "Red flags",
                 
-                radioButtons(
+                checkboxGroupInput(
                     width = '800px',
                     "uti-pyelo",
                     "Are any signs of pyelonephritis present?",
-                    c("Fever", "Chills", "Nausea and vomiting", "Flank or Back pain", "Significant malaise", "None")
+                    c("Fever", "Chills", "Nausea and vomiting", "Flank or Back pain", "Significant malaise")
                 ),
-                radioButtons(
+                checkboxGroupInput(
                     width = '800px',
                     "uti_othersxs",
                     "Are any other unusual symptoms present?",
-                    c("Vaginal discharge or itch", "Dyspareunia", "Other significan symptoms", "None")
+                    c("Vaginal discharge or itch", "Dyspareunia", "Other significan symptoms")
                 )
             ),
             
