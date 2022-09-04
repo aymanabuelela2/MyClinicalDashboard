@@ -1,0 +1,13 @@
+name: MyClinicalDashboard
+title: MyClinicalDashboard
+username:
+account: 98z04w-ayman-elkhodiery
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6915131
+bundleId: 6266554
+url: https://98z04w-ayman-elkhodiery.shinyapps.io/MyClinicalDashboard/
+when: 1662254359.41513
+lastSyncTime: 1662254359.41514
+asMultiple: FALSE
+asStatic: FALSE
