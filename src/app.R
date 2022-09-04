@@ -14,7 +14,6 @@ server <- myserver
 shinyApp(ui = ui, server = server)
 
 # To do:
-## UTI resources panel
 ## DAP note text output
 ## DAP note HTML Report
 ## Dr letter
