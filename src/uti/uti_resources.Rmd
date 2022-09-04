@@ -2,12 +2,13 @@
 title: ""
 output: html_document
 ---
-[UTI in adults: Guidelines for Pahramcists--Epicore UoA](./src/ext_files/epicore.pdf) 
 
-[Guidelines for Empiric Treatment of UTI in Adults--Toronto CLHIN](./src/ext_files/empiricUTI.pdf)
+[UTI in adults: Guidelines for Pahramcists--Epicore UoA](www/epicore.pdf) 
 
-[MedSask Algorithm--ACUTE UNCOMPLICATED URINARY TRACT INFECTION IN WOMEN (CYSTITIS)](./src/ext_files/UTI_algorithm.pdf)
+[Guidelines for Empiric Treatment of UTI in Adults--Toronto CLHIN](www/empiricUTI.pdf)
 
-[MedSask PHARMACIST ASSESSMENT – UNCOMPLICATED URINARY TRACT INFECTION](./src/ext_files/UTI_assessment.pdf)
+[MedSask Algorithm--ACUTE UNCOMPLICATED URINARY TRACT INFECTION IN WOMEN (CYSTITIS)](www/UTI_algorithm.pdf)
+
+[MedSask PHARMACIST ASSESSMENT – UNCOMPLICATED URINARY TRACT INFECTION](www/UTI_assessment.pdf)
 
 [Alberta Antibiograms](https://www.albertaprecisionlabs.ca/hp/Page13779.aspx)
