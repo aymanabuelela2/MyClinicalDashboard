@@ -3,15 +3,16 @@ source("./Rx/Rx.R")
 source("./patient.R")
 
 uti_ui <- conditionalPanel(
+
+# header ------------------------------------------------------------------
     condition = "input.prescribe_condition == 'Urinary Tract Infection'", 
     h2("Uncomplicated Urinary Tract Infection"),
+
+# Patient Information -----------------------------------------------------    
+    fluidRow(patient),
+
+# Patient assessment -------------------------------------------------------
     fluidRow(
-        # patient information
-        patient
-    ),
-    fluidRow(
-        
-        # Patient Assessment
         tabBox(
             width = 12,
             title = "Patient Assessment",
@@ -89,10 +90,17 @@ uti_ui <- conditionalPanel(
                     choices = NULL,
                     multiple = TRUE
                 ),
-                h4("Prior treatment for UTI:"),
-                selectizeInput("uti_prior","Medication", choices = NULL),
-                textInput("uti_effect", "Effect", placeholder = "Effective/Not effective"),
-                textInput("uti_tolerance", "Tolerance", placeholder = "Tolerable/Not tolerable")
+                radioButtons("uti_prior", "Prior treatment for UTI", c("Yes", "No", "other")),
+                conditionalPanel(
+                    condition = "input.uti_prior == 'Yes'",
+                    selectizeInput("uti_priorMed","Medication", choices = NULL),
+                    textInput("uti_effect", "Effect", placeholder = "Effective/Not effective"),
+                    textInput("uti_tolerance", "Tolerance", placeholder = "Tolerable/Not tolerable")
+                ),
+                conditionalPanel(
+                    condition = "input.uti_prior == 'other'",
+                    textAreaInput("uti_priorOther", "Please, elaborate:")
+                )
             ),
             
             ## symptoms presentation
@@ -147,10 +155,10 @@ uti_ui <- conditionalPanel(
             )
         )
     ),
-    
+
     fluidRow(
-        
-        # GOT
+
+# GOT ---------------------------------------------------------------------
         box(
             width = 4,
             title = "Goals of Therapy",
@@ -173,7 +181,8 @@ uti_ui <- conditionalPanel(
                 )
         ),
         
-        # ttt
+
+# TTT ---------------------------------------------------------------------
         tabBox(
             width = 8,
             id = "uti_ttt", 
@@ -215,8 +224,8 @@ uti_ui <- conditionalPanel(
     ),
     
     fluidRow(
-        
-        # FU
+
+# Follow up ---------------------------------------------------------------
         box(
             width = 4,
             title = "Monitoring & Follow up Plan",
@@ -246,8 +255,9 @@ uti_ui <- conditionalPanel(
                 )
             )
         ),
-        
-        # DAP & Dr Letter
+
+# DAP note & Dr letter ----------------------------------------------------
+
         tabBox(width = 8,
             id = "uti_doc",
             title = "Document & Collaborate",
@@ -338,7 +348,10 @@ uti_server <- function(input, output) {
     # Rx
     rx_server(input, output)
     
-    # Dap Data
+
+# Server: DAP text output -------------------------------------------------
+
+    # Data
     ## Medical hx
     output$uti_pbf <- renderText({
         if (input$uti_pbf == "No") {
@@ -397,7 +410,12 @@ uti_server <- function(input, output) {
     # DAP Assessment
     
     # DAP plan
-    
-    # Dr letter
+
+# Server: generate DAP note -----------------------------------------------
+
+
+# Server: generate Dr letter ----------------------------------------------
+
+
     
 }

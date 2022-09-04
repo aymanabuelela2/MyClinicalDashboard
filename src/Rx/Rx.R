@@ -39,7 +39,10 @@ rx_ui <- fluidPage(
 )
 
 rx_server <- function(input, output) {
+    # server size medication selection
     updateSelectizeInput(inputId = "medName", choices = drugs, server = TRUE)
+    
+    # Processing download Rx
     output$rx <- downloadHandler(
         filename = "Rx.html",
         content = function(file) {
