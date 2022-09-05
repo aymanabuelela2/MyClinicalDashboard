@@ -1,4 +1,4 @@
-source("./uti.R")
+source("./uti/uti.R")
 source("./overview.R")
 load("./prescribe_conditions.Rds")
 
@@ -104,4 +104,8 @@ myserver <- function(input, output) {
     ## Travel servers
     
     ## FU servers
+    
+    ## resource path (to link external files)
+    shiny::addResourcePath(prefix = "www", directoryPath = here::here("www"))
+    
 }

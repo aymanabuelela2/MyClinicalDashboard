@@ -39,12 +39,15 @@ rx_ui <- fluidPage(
 )
 
 rx_server <- function(input, output) {
+    # server size medication selection
     updateSelectizeInput(inputId = "medName", choices = drugs, server = TRUE)
+    
+    # Processing download Rx
     output$rx <- downloadHandler(
         filename = "Rx.html",
         content = function(file) {
             tempReport <- file.path(tempdir(), "Rx.Rmd")
-            file.copy("Rx.Rmd", tempReport, overwrite = TRUE)
+            file.copy("./Rx/Rx.Rmd", tempReport, overwrite = TRUE)
             if (input$pharmacy == "SDM Mahogany #2371") {
                 address <- "7 Mahogany Plaza SE, Unit 610<br>Calgary, Alberta T3M 2P8<br>Phone:403-278-3606<br>Fax: 403-278-2514"
             } 

@@ -1,0 +1,14 @@
+---
+title: ""
+output: html_document
+---
+
+[UTI in adults: Guidelines for Pahramcists--Epicore UoA](www/epicore.pdf) 
+
+[Guidelines for Empiric Treatment of UTI in Adults--Toronto CLHIN](www/empiricUTI.pdf)
+
+[MedSask Algorithm--ACUTE UNCOMPLICATED URINARY TRACT INFECTION IN WOMEN (CYSTITIS)](www/UTI_algorithm.pdf)
+
+[MedSask PHARMACIST ASSESSMENT – UNCOMPLICATED URINARY TRACT INFECTION](www/UTI_assessment.pdf)
+
+[Alberta Antibiograms](https://www.albertaprecisionlabs.ca/hp/Page13779.aspx)

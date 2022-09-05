@@ -7,7 +7,7 @@ overview_ui <- fluidRow(
         #collapsed = TRUE,
         #solidHeader = TRUE,
         #status = "warning",
-        includeMarkdown("./app.Rmd")
+        includeMarkdown("./overview.Rmd")
     ),
     
     # author
