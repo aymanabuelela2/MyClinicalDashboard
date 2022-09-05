@@ -1,3 +1,7 @@
+
+# load libraries and source files -----------------------------------------
+
+library(lubridate)
 load("./drugs.Rds")
 source("./Rx/Rx.R")
 source("./patient.R")
@@ -25,6 +29,14 @@ uti_ui <- conditionalPanel(
                     "Pregnant or Breastfeeding",
                     c("Pregnant", "Breastfeeding", "No", "N/A")
                 ),
+                conditionalPanel(
+                    condition = "input.uti_pbf == 'Pregnant'",
+                    sliderInput(
+                        "uti_pregWks",
+                        "Weeks: ",
+                        min = 1, max = 42, value = 12
+                    )
+                ),
                 radioButtons(
                     "uti_ckd",
                     "Does the patient have CKD?",
@@ -46,8 +58,15 @@ uti_ui <- conditionalPanel(
                     c("No", "Yes")
                 ),
                 radioButtons(
+                    width = '800px',
                     "uti_recentEpisode",
-                    "Previoius episode of UTI within 14 days: ",
+                    "Previoius episode of UTI within the past 4 weeks: ",
+                    c("No", "Yes")
+                ),
+                radioButtons(
+                    width = '800px',
+                    "uti_recurrent",
+                    "Two or more episodes of UTI within last 6 months or three or more episodes within last 12 months?",
                     c("No", "Yes")
                 ),
                 radioButtons(width = '800px',
@@ -57,7 +76,7 @@ uti_ui <- conditionalPanel(
                 ),
                 radioButtons(width = '800px',
                              "uti_abnormalStructure",
-                             "Does the patient have abnormal urinary tract function or structure? (indwelling catherter, neurogenic bladder, renal stones, renal dysfunction, etc.)",
+                             "Does the patient have abnormal urinary tract function or structure? (indwelling catheter, neurogenic bladder, renal stones, renal dysfunction, etc.)",
                              c("No", "Yes")
                 ),
                 radioButtons(
@@ -99,7 +118,7 @@ uti_ui <- conditionalPanel(
                 ),
                 conditionalPanel(
                     condition = "input.uti_prior == 'other'",
-                    textAreaInput("uti_priorOther", "Please, elaborate:")
+                    textAreaInput("uti_priorOther", "Upon asking patient indicated that: ")
                 )
             ),
             
@@ -120,7 +139,7 @@ uti_ui <- conditionalPanel(
                 
                 checkboxGroupInput(
                     width = '800px',
-                    "uti-pyelo",
+                    "uti_pyelo",
                     "Are any signs of pyelonephritis present?",
                     c("Fever", "Chills", "Nausea and vomiting", "Flank or Back pain", "Significant malaise")
                 ),
@@ -128,7 +147,7 @@ uti_ui <- conditionalPanel(
                     width = '800px',
                     "uti_othersxs",
                     "Are any other unusual symptoms present?",
-                    c("Vaginal discharge or itch", "Dyspareunia", "Other significan symptoms")
+                    c("Vaginal discharge or itch", "Dyspareunia", "Other significant symptoms")
                 )
             ),
             
@@ -137,14 +156,15 @@ uti_ui <- conditionalPanel(
                 "Assessment",
                 radioButtons(
                     width = '800px',
-                    "uti_assessment",
+                    "uti_decision",
                     "According to the patient's clinical presentation, I decided to:",
                     c("Treat", "Refer"), selected = "Treat"
                 ),
                 textAreaInput(
                     width = '800px',
                     "uti_rationale",
-                    "Rationale"
+                    "Rationale", 
+                    placeholder = "Patient's clinical presentation comply with uncomplicated urinary tract infection symptoms. Patient does not show red flags or concerning symptoms. Patient has history of UTI treatment and eligible for pharmacist prescribing for minor ailment."
                 )
             ),
             
@@ -266,37 +286,21 @@ uti_ui <- conditionalPanel(
             tabPanel(
                 title = "DAP note",
                 h4("Data:"),
-                h5("*Medical history: "),
-                textOutput("uti_pbf"),
-                textOutput("uti_ckd"),
-                conditionalPanel(
-                    condition = "input.uti_ckd == 'Yes'",
-                    textOutput("uti_crcl")
-                ),
-                textOutput("uti_prevEpisodes"),
-                textOutput("uti_recentEpisode"),
-                textOutput("uti_immunocomp"),
-                textOutput("uti_abnormalStructure"),
-                textOutput("uti_maleOrChild"),
-                textOutput("uti_addhx"),
-                
-                h5("*Medication hitory:"),
-                textOutput("uti_immunosupressors"),
-                textOutput("uti_cysititisMed"),
-                
-                h5("Prior treatment for UTI: "),
-                
-                h5("*Clinical Presentation:"),
-                
-                h5 ("*Red Flags"),
+                textOutput("uti_dataHx"),
+                textOutput("uti_dataHx2"),
+                textOutput("uti_dataHx3"),
+                textOutput("uti_dataSx"),
+                textOutput("uti_dataRedFlags"),
                 hr(),
                 
                 # assessment
                 h4("Assessment:"),
+                textOutput("uti_assessment"),
                 hr(),
                 
                 # plan
                 h4("Plan:"),
+                textOutput("uti_plan"),
                 hr(),
                 
                 # Export DAP note
@@ -339,10 +343,10 @@ uti_server <- function(input, output) {
     
     # prior treatment to uti medication selection
     updateSelectizeInput(
-        inputId = "uti_prior",
+        inputId = "uti_priorMed",
         choices = drugs,
         server = TRUE,
-        selected = "PMS-NITROFURANTOIN BID"
+        selected = "NITROFURANTOIN"
     )
     
     # Rx
@@ -352,64 +356,168 @@ uti_server <- function(input, output) {
 # Server: DAP text output -------------------------------------------------
 
     # Data
-    ## Medical hx
-    output$uti_pbf <- renderText({
+    ## Hx
+    output$uti_dataHx <- renderText({
+        # age
+        age <- trunc(as.Date(input$ptDOB) %--% Sys.Date() / years(1))
+        
+        # Preg & breastfeeding
         if (input$uti_pbf == "No") {
-            paste0("- Patient is not pregnant or breastfeeding.")
-        } else {if (input$uti_pbf != "N/A") {
-            paste0("- Patient is ", input$uti_pbf)
-        }}
-    })
-    output$uti_ckd <- renderText({
-        paste0("- Chronic Kidney Disease: ", input$uti_ckd)
-    })
-    output$uti_crcl <- renderText({
-        paste0("- CrCl: ", input$uti_crcl)
-    })
-    output$uti_prevEpisodes <- renderText({
-        paste0("- Previous epsiodes of diagnosed UTI: ", input$uti_prevEpisodes)
-    })
-    output$uti_recentEpisode <- renderText({
-        paste0("- Recent episode within 14 days: ", input$uti_recentEpisode)
-    })
-    output$uti_immunocomp <- renderText({
-        paste0("- Immunocompromising conditions including uncontrolled diabetes: ", input$uti_immunocomp)
-    })
-    output$uti_abnormalStructure <- renderText({
-        paste0("- Abnormal UTI function or structure (indewiling catheter, neurogenic bladder, renal stones, etc.): ", input$uti_abnormalStructure)
-    })
-    output$uti_maleOrChild <- renderText({
-        paste0("- Male or child < 16 years old: ", input$uti_maleOrChild)
-    })
-    output$uti_addhx <- renderText({
-        if (input$uti_addhx != "") {
-            paste0("- Additional notes: ", input$uti_addhx)
+            pbf <- "Patient is not pregnant or breastfeeding. "
+        } else {
+            if (input$uti_pbf == "Pregnant") {
+                pbf <- paste0("Patient is ", input$uti_pregWks, " weeks pregnant (REFER). ")
+            } else {
+                pbf <- "Patient is breastfeeding. "
+            }
         }
+        
+        # CKD
+        if (input$uti_ckd == "No") {
+            ckd <- "Patient does not have history of chronic kidney disease. "
+        } else {
+            ckd <- paste0("Patient has history of chronic kidney disease and her current eGFR is ",
+            input$uti_crcl, " ml/min. "
+            )
+        }
+        
+        # render text
+        paste0(input$ptName, " is a ", age, " years old ", tolower(input$ptGender),
+               " who presented to the pharmacy asking for a prescription for urinary tract infection. ",
+               pbf, ckd
+        )
     })
     
-    ## Medication hx
-    output$uti_immunosupressors <- renderText({
-        if (input$uti_immunosuppressors == "Yes") {
-            paste0("- The patient is on immunosupressant medication--REFER")
+    output$uti_dataHx2 <- renderText({
+        # Previous episodes
+        if (input$uti_prevEpisodes == "No") {
+            prevEpisodes <- "This is the first time the patient experiences UTI (REFER). "
         } else {
-            paste0("- Patient is NOT on immunosuppresant medication.")
+            prevEpisodes <- "Patient had one or more previoius episodes of UTI. "
         }
+        
+        # Recent epidoses within 4 weeks
+        if (input$uti_recentEpisode == "No") {
+            recentEpisode <- "No recent episodes within the past 4 weeks. "
+        } else {
+            recentEpisode <- "Patient had an episode or more in the past 4 weeks (REFER). "
+        }
+        
+        # Recurrent infection
+        if (input$uti_recurrent == "No") {
+            recurrent <- "No recurrent infection (2 or more in the past 6 months, 3 or more in the past 12 months). "
+        } else {
+            recurrent <- "Patient had recurrent episodes of UTI (2 or more in the past 6 months, 3 or more in the past 12 months, REFER). "
+        } 
+        
+        # Immunocompromised
+        if (input$uti_immunocomp == "No") {
+            immunocomp <- "No immunocompromising medical conditions. "
+        } else {
+            immunocomp <- "Patient has an immunocompromising condition (REFFER). "
+        }
+        
+        # Structural abnormality
+        if (input$uti_abnormalStructure == "No") {
+            abSt <- "No abnormal urinary structure or function. "
+        } else {
+            abSt <- "Patient has abnormal urinay structure or function (REFER). "
+        }
+        
+        #render text
+        paste0(prevEpisodes, recentEpisode, recurrent, immunocomp, abSt)
     })
-    output$uti_cysititisMed <- renderText({
-        if (input$uti_cysititisMed == "Yes") {
-            paste0("- Patient is on cystitis-inducing medication--REFER")
+    
+    output$uti_dataHx3 <- renderText({
+        ## Medication hx
+        if (input$uti_immunosuppressors == "No") {
+            immunoCompMed <- "No immunocompromising medications. "
         } else {
-            paste0("- Patient is NOT on cystititis-induding medication.")
+            immunoCompMed <- "Patient is currently on an immuno comopromising condition (REFER). "
         }
+        
+        if (input$uti_cysititisMed == "No") {
+            cystitisMeds <- "No Cystitis-inducing medications. "
+        } else {
+            cystitisMeds <- "Patient is currently on one or more cystitis-inducing medication. "
+        }
+        
+        if (length(input$uti_allergies) > 0) {
+            allergies <- paste0("Patient is allergic to ", paste0(tolower(input$uti_allergies), collapse = ", "), ". ")
+        } else {
+            allergies <- "Patinet reported no known allergies. "
+        }
+        
+        if (input$uti_prior == "No") {
+            prior <- "Patietn did not use drug therapy for UTI before. "
+        }
+        if (input$uti_prior == "other") {
+            prior <- paste0(
+                "Upon asking about the prior treatment of UTI, patient indicated that",
+                input$uti_priorOther, ". "
+            )
+            
+        } else {
+            prior <- paste0("Patient used ", tolower(input$uti_priorMed), 
+                            " for UTI before where it was ", input$uti_effect,
+                            " and ", input$uti_tolerance, ". "
+            )
+        }
+        
+        paste0(immunoCompMed, cystitisMeds, allergies, prior)
     })
     
     ## Clinical presentation
+    output$uti_dataSx <- renderText({
+        
+        if (length(input$uti_sxs) > 0) {
+            sxs <- paste0(tolower(input$uti_sxs), collapse = ", ")
+        } else {
+            sxs <- "no symptoms"
+        }
+        
+        #render text
+        paste0("Patient presented with ", sxs, ". ")
+        
+    })
     
     ## Red Flags
+    output$uti_dataRedFlags <- renderText({
+        pyeloSxs <- c("Fever", "Chills", "Nausea and vomiting", "Flank or Back pain", "Significant malaise") 
+        if (length(input$uti_pyelo) == 0) {
+            pyelo <- paste0("Patient does not experience any pyelonephritis symptoms (",
+            paste0(tolower(pyeloSxs), collapse = ", "), "). ")
+        } else {
+            pyelo <- paste0("Patient presented with the following pyelonephritits symptoms: ", 
+                paste0(tolower(input$uti_pyelo), collapse = ", "), " (REFER). "
+            )
+        }
+        
+        if (length(input$uti_othersxs) == 0){
+            othersxsAll <- c("Vaginal discharge or itch", "Dyspareunia", "Other significant symptoms")
+            othersxs <- paste0("Patient does not show any other red flag symtoms (",
+                paste0(tolower(othersxsAll), collapse = ", "), "). "
+            )
+        } else {
+            othersxs <- paste0("Patient presented with the following red flag symptoms: ",
+                paste0(tolower(input$uti_othersxs), collapse = ", "), " (REFER). "
+            )
+        }
+        
+        # render text
+        paste0(pyelo, othersxs)
+        
+    })
     
     # DAP Assessment
+    output$uti_assessment <- renderText({
+        
+    })
     
     # DAP plan
+    output$uti_plan <- renderText({
+        
+    })
 
 # Server: generate DAP note -----------------------------------------------
 
