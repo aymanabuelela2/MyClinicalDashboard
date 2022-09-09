@@ -1,0 +1,77 @@
+---
+title: "Uncomplicated Urinary Tract Infection"
+output: html_document
+date: "`r Sys.Date()`"
+params:
+    hx: NA
+    hx2: NA
+    hx3: NA
+    dataSx: NA
+    dataRedFlags: NA
+    assessment: NA
+    plan: NA
+    prescriber_name: NA
+    pt_name: NA
+    pt_dob: NA
+    pt_phn: NA
+    pt_tel: NA
+    pt_gender: NA
+    pt_address: NA
+---
+
+
+```{r, echo=FALSE}
+knitr::asis_output(paste0(
+    '##### **Name**: ', params$pt_name,'<br>**PHN**: ', params$pt_phn, '<br>', 
+    '**DOB**:', params$pt_dob, '<br>**Tel**: ', params$pt_tel, '<br>',
+    '**Gender**: ', params$pt_gender, '<br>',
+    '**Address**: ', params$pt_address
+    ))
+```
+
+### Data
+
+```{r data, echo=FALSE}
+knitr::asis_output(params$hx)
+```
+
+```{r data2, echo=FALSE}
+knitr::asis_output(params$hx2)
+```
+
+```{r data3, echo=FALSE}
+knitr::asis_output(params$hx3)
+```
+
+```{r data4, echo=FALSE}
+knitr::asis_output(params$dataSx)
+```
+
+```{r data5, echo=FALSE}
+knitr::asis_output(params$dataRedFlags)
+```
+
+### Assessment 
+
+```{r assessmetn, echo=FALSE}
+knitr::asis_output(params$assessment)
+```
+
+### Plan
+
+```{r plan, echo=FALSE}
+knitr::asis_output(params$plan)
+```
+
+---
+
+<br />
+
+```{r signature, echo=FALSE}
+knitr::asis_output(paste0('##### Signature:________________________________________________<br>'))
+knitr::asis_output(params$prescriber_name)
+```
+
+---
+
+ClinDoc-Prescribe© 
