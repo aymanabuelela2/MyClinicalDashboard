@@ -64,7 +64,7 @@ knitr::asis_output(paste0('#### Qty: ', params$rx_qty))
 <br />
 <br />
 
-```{r, echo=FALSE}
+```{r signature, echo=FALSE}
 knitr::asis_output(paste0('##### Signature:________________________________________________<br>'))
 knitr::asis_output(params$prescriber_name)
 ```
