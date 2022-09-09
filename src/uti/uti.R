@@ -394,10 +394,11 @@ uti_server <- function(input, output) {
         }
         
         # render text
-        paste0(input$ptName, " is a ", age, " years old ", tolower(input$ptGender),
+        hx <<- paste0(input$ptName, " is a ", age, " years old ", tolower(input$ptGender),
                " who presented to the pharmacy asking for a prescription for urinary tract infection. ",
                pbf, ckd
         )
+        hx
     })
     
     output$uti_dataHx2 <- renderText({
@@ -437,7 +438,8 @@ uti_server <- function(input, output) {
         }
         
         #render text
-        paste0(prevEpisodes, recentEpisode, recurrent, immunocomp, abSt)
+        hx2 <<- paste0(prevEpisodes, recentEpisode, recurrent, immunocomp, abSt)
+        hx2
     })
     
     output$uti_dataHx3 <- renderText({
@@ -476,7 +478,8 @@ uti_server <- function(input, output) {
             )
         }
         
-        paste0(immunoCompMed, cystitisMeds, allergies, prior)
+        hx3 <<- paste0(immunoCompMed, cystitisMeds, allergies, prior)
+        hx3
     })
     
     ## Clinical presentation
@@ -489,8 +492,8 @@ uti_server <- function(input, output) {
         }
         
         #render text
-        paste0("Patient presented with ", sxs, ". ")
-        
+        dataSx <<- paste0("Patient presented with ", sxs, ". ")
+        dataSx
     })
     
     ## Red Flags
@@ -517,8 +520,8 @@ uti_server <- function(input, output) {
         }
         
         # render text
-        paste0(pyelo, othersxs)
-        
+        dataRedFlags <<- paste0(pyelo, othersxs)
+        dataRedFlags
     })
     
     # DAP Assessment
@@ -538,7 +541,7 @@ uti_server <- function(input, output) {
         }
         
         # render text
-        paste0(assessment)
+        assessment
     })
     
     # DAP plan
@@ -553,15 +556,42 @@ uti_server <- function(input, output) {
         
         ## Follow up
         fu <<- paste0(
-            
+            "I will follow up with patient in ", input$uti_fuSchedule, " ",
+            input$uti_fuUOT, " ", tolower(input$uti_fuMeans), " on the folowing: ",
+            paste0(input$uti_fuItems, collapse = ", "), ". "
         )
         
         # render text
-        paste0(ttt)
-        
+        plan <<- paste0(ttt, fu)
     })
 
 # Server: generate DAP note -----------------------------------------------
+    output$uti_exportDAP <- downloadHandler(
+        filename = "uti_dap.html",
+        content = function(file) {
+            tempReport <- file.path(tempdir(), "uti_dap.Rmd")
+            file.copy("./uti/uti_dap.Rmd", tempReport, overwrite = TRUE)
+            
+            # passing input parameters
+            params <- list(
+                hx = hx,
+                hx2 = hx2,
+                hx3 = hx3,
+                pt_name = input$ptName,
+                pt_dob = input$ptDOB,
+                pt_phn = input$ptPHN,
+                pt_gender = input$ptGender,
+                pt_tel = input$ptTel,
+                pt_address = input$ptAddress,
+                dataSx = dataSx,
+                dataRedFlags = dataRedFlags,
+                assessment = assessment,
+                plan = plan,
+                prescriber_name = input$pharmacist
+            )
+            rmarkdown::render(tempReport, output_file = file, params = params, envir = new.env(parent = globalenv()))
+        }
+    )
 
 
 # Server: generate Dr letter ----------------------------------------------
