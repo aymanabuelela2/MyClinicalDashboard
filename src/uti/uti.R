@@ -574,28 +574,68 @@ uti_server <- function(input, output) {
             
             # passing input parameters
             params <- list(
-                hx = hx,
-                hx2 = hx2,
-                hx3 = hx3,
                 pt_name = input$ptName,
                 pt_dob = input$ptDOB,
                 pt_phn = input$ptPHN,
                 pt_gender = input$ptGender,
                 pt_tel = input$ptTel,
                 pt_address = input$ptAddress,
+                hx = hx,
+                hx2 = hx2,
+                hx3 = hx3,
                 dataSx = dataSx,
                 dataRedFlags = dataRedFlags,
                 assessment = assessment,
                 plan = plan,
                 prescriber_name = input$pharmacist
             )
+            
+            # render
             rmarkdown::render(tempReport, output_file = file, params = params, envir = new.env(parent = globalenv()))
         }
     )
 
 
 # Server: generate Dr letter ----------------------------------------------
-
-
+    output$uti_dr <- downloadHandler(
+        filename = "uti_dr.html",
+        content = function(file) {
+            tempReport <- file.path(tempdir(), "uti_dr.Rmd")
+            file.copy("./uti/uti_dr.Rmd", tempReport, overwrite = TRUE)
+            
+            # passing input parameters
+            params <- list(
+                prescriber_name = input$pharmacist,
+                prescriber_address = address,
+                pt_name = input$ptName,
+                pt_dob = input$ptDOB,
+                pt_phn = input$ptPHN,
+                pt_gender = input$ptGender,
+                pt_tel = input$ptTel,
+                pt_address = input$ptAddress,
+                med_name = input$medName,
+                med_strength = input$medStrength,
+                med_dosageForm = input$medDosageform,
+                directions_n = input$n,
+                directions_route = input$route,
+                directions_freq = input$freq,
+                directions_duration = input$duration,
+                rx_qty = input$rxQty,
+                hx = hx,
+                hx2 = hx2,
+                hx3 = hx3,
+                dataSx = dataSx,
+                dataRedFlags = dataRedFlags,
+                assessment = assessment,
+                plan = plan,
+                drfirst = input$drfirst,
+                drlast = input$drlast,
+                drfax = input$drfax
+            )
+            
+            # render
+            rmarkdown::render(tempReport, output_file = file, params = params, envir = new.env(parent = globalenv()),)
+        }
+    )
     
 }
