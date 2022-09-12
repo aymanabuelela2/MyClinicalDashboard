@@ -46,22 +46,25 @@ rx_server <- function(input, output) {
     # server size medication selection
     updateSelectizeInput(inputId = "medName", choices = drugs, server = TRUE)
     
+    # address
+    reactVal <- reactive({
+        if (input$pharmacy == "SDM Mahogany #2371") {
+            address <<- "7 Mahogany Plaza SE, Unit 610<br>Calgary, Alberta T3M 2P8<br>Phone:403-278-3606<br>Fax: 403-278-2514"
+        } else {
+            if (input$pharmacy == "SDM Seton #2366") {
+                address <<- "19489 Seton Crescent SE, Unit 106<br>Calgary, Alberta T3M 1T4<br>Phone: 403-279-7726<br>Fax: 403-257-8067"
+            } else{
+                address <<- input$phcyAddress
+            }
+        }
+    })
+    
     # Processing download Rx
     output$rx <- downloadHandler(
         filename = "Rx.html",
         content = function(file) {
             tempReport <- file.path(tempdir(), "Rx.Rmd")
             file.copy("./Rx/Rx.Rmd", tempReport, overwrite = TRUE)
-            if (input$pharmacy == "SDM Mahogany #2371") {
-                address <- "7 Mahogany Plaza SE, Unit 610<br>Calgary, Alberta T3M 2P8<br>Phone:403-278-3606<br>Fax: 403-278-2514"
-            } else {
-                if (input$pharmacy == "SDM Seton #2366") {
-                    address <- "19489 Seton Crescent SE, Unit 106<br>Calgary, Alberta T3M 1T4<br>Phone: 403-279-7726<br>Fax: 403-257-8067"
-                } else{
-                    address <- input$phcyAddress
-                }
-            }
-            
             params <- list(
                 prescriber_name = input$pharmacist,
                 prescriber_address = address,
@@ -80,6 +83,8 @@ rx_server <- function(input, output) {
                 directions_duration = input$duration,
                 rx_qty = input$rxQty
             )
+            
+            # render
             rmarkdown::render(tempReport, output_file = file, params = params, envir = new.env(parent = globalenv()))
         }
     )
