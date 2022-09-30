@@ -12,49 +12,46 @@ params:
     pt_gender: NA
     pt_address: NA
     med_name: NA
-    med_strength: NA
     med_dosageForm: NA
     directions_n: NA
     directions_route: NA
     directions_freq: NA
+    directions_prn: NA
     directions_duration: NA
+    directions_uot: MA
     rx_qty: NA
+    rx_refills: NA
 ---
-
 
 ```{r prescriber, echo=FALSE}
-knitr::asis_output(paste0('##### **', params$prescriber_name, '**'))
-```
-
-```{r, echo=FALSE}
-knitr::asis_output(paste0('##### ', params$prescriber_address))
-```
-
----
-
-```{r, echo=FALSE}
-knitr::asis_output(paste0(
-    '##### **Name**: ', params$pt_name,'<br>**PHN**: ', params$pt_phn, '<br>', 
-    '**DOB**:', params$pt_dob, '<br>**Tel**: ', params$pt_tel, '<br>',
-    '**Gender**: ', params$pt_gender, '<br>',
-    '**Address**: ', params$pt_address
+knitr::asis_output(paste0('**', params$prescriber_name, '**', 
+                          '<br>', params$prescriber_address
     ))
 ```
 
----
-
-# Rx
-
 ```{r, echo=FALSE}
-knitr::asis_output(paste0('### ', params$med_name, ' ', params$med_strength, 'mg ', params$med_dosageForm))
+knitr::asis_output(paste0(
+    '**', params$pt_name, '**',
+    '<br>PHN: ', params$pt_phn, '  DOB:', params$pt_dob, '  ', params$pt_gender,
+    '<br>', params$pt_address, 
+    '<br>', params$pt_tel
+    
+    ))
 ```
 
 ```{r, echo=FALSE}
-knitr::asis_output(paste0('#### ', params$directions_n, ' ', params$directions_route, ' ', params$directions_freq, ' for ', params$directions_duration, ' days'))
+knitr::asis_output(paste0('**', params$med_name, '**'))
 ```
 
 ```{r, echo=FALSE}
-knitr::asis_output(paste0('#### Qty: ', params$rx_qty))
+knitr::asis_output(paste0(params$directions_n, ' ', params$med_dosageForm, ' ', params$directions_route, ' ', params$directions_freq, 
+                          params$directions_prn, ' x ', params$directions_duration, ' ', params$directions_uot))
+```
+
+```{r, echo=FALSE}
+knitr::asis_output(paste0( '**Qty:** ', params$rx_qty, ' ', params$med_dosageForm, '<br>',
+    ' **Refills**: ', params$rx_refills
+    ))
 ```
 
 ---

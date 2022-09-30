@@ -328,17 +328,6 @@ uti_ui <- conditionalPanel(
                 textInput("drfirst", "Dr's First Name"),
                 textInput("drlast", "Dr's Last Name"),
                 textInput("drfax", "Dr's Fax Number"),
-                checkboxGroupInput(
-                    "drelements",
-                    "What to include in the Dr's letter?",
-                    c(
-                        "Patient Assessment",
-                        "Goals of therapy",
-                        "Pharmacologic therapy",
-                        "Non-pharmacologic therapy",
-                        "Monitoring & Follow up plan"
-                    )
-                ),
                 downloadButton("uti_dr", label = "Generate letter", class = 'btn-success')
             )
         )
@@ -549,9 +538,9 @@ uti_server <- function(input, output) {
         ## Treatment
         ttt <<- paste0(
             "After discussing the possible therapeutic alternatives for UTI treatment with the patient, I prescribed ", 
-            input$medName, " ", input$medStrength, " mg ", input$medDosageform,
+            input$medName, " ", input$n, " ", input$unit,
             " ", input$route, " ", input$freq, " for ", 
-            input$duration, " days. "
+            input$duration, " ", input$unitDuration, ". "
         )
         
         ## Follow up
@@ -614,13 +603,15 @@ uti_server <- function(input, output) {
                 pt_tel = input$ptTel,
                 pt_address = input$ptAddress,
                 med_name = input$medName,
-                med_strength = input$medStrength,
-                med_dosageForm = input$medDosageform,
                 directions_n = input$n,
+                med_dosageForm = input$unit,
                 directions_route = input$route,
                 directions_freq = input$freq,
+                directions_prn = prn,
                 directions_duration = input$duration,
+                directions_uot = input$unitDuration,
                 rx_qty = input$rxQty,
+                rx_refills = input$refills,
                 hx = hx,
                 hx2 = hx2,
                 hx3 = hx3,
