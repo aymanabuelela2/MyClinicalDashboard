@@ -6,10 +6,9 @@ load("./drugs.Rds")
 source("./Rx/Rx.R")
 source("./patient.R")
 
-uti_ui <- conditionalPanel(
-
+uti_ui <- fluidPage(
+    #condition = "input.condition == 'Urinary Tract Infection'",
 # header ------------------------------------------------------------------
-    condition = "input.prescribe_condition == 'Urinary Tract Infection'", 
     h2("Uncomplicated Urinary Tract Infection"),
 
 # Patient Information -----------------------------------------------------    

@@ -14,4 +14,7 @@ server <- myserver
 shinyApp(ui = ui, server = server)
 
 # To do:
-## Dr letter
+# cold sore
+# conjunctivitis
+# TDaP in pregnancy
+# HPV

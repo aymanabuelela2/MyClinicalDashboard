@@ -1,7 +1,8 @@
-# read raw files
-dr <- read.delim("~/Downloads/allfiles/drug.txt", sep = ",", header = FALSE, colClasses = rep("character", 14))
-ingred <- read.delim("~/Downloads/allfiles/ingred.txt", sep = ",", header = FALSE, colClasses = rep("character", 15))
-form <- read.delim("~/Downloads/allfiles/form.txt", sep = ",", header = FALSE, colClasses = rep("character", 4))
+# read raw files, downloaded from ""
+# on sep 29 2022
+#dr <- read.delim("~/Downloads/allfiles/drug.txt", sep = ",", header = FALSE, colClasses = rep("character", 14))
+#ingred <- read.delim("~/Downloads/allfiles/ingred.txt", sep = ",", header = FALSE, colClasses = rep("character", 15))
+#form <- read.delim("~/Downloads/allfiles/form.txt", sep = ",", header = FALSE, colClasses = rep("character", 4))
 
 # Reduce to needed columns only
 ingredR <- ingred[,c(1,3,5,6,8,10)]
