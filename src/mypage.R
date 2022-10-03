@@ -53,10 +53,6 @@ mypage <- dashboardPage(
                 menuSubItem(tabName = "smoking", text = "Smoking Cessation", icon = icon("fa-solid fa-smoking", verify_fa = FALSE)),
                 menuSubItem(tabName = "tdap", text = "TDaP for Pregnancy", icon = icon("fa-thin fa-person-pregnant", verify_fa = FALSE)),
                 menuSubItem(tabName = "uti", text = "Urinary Tract Infection", icon = icon("fa-solid fa-toilet", verify_fa = FALSE))
-                # menuSubItem(
-                #     tabName = "prescribe1",
-                #     selectInput(inputId = "condition", label = "Condition", prescribe_conditions)
-                # )
             ),
             
             ## MedRev

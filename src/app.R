@@ -18,3 +18,5 @@ shinyApp(ui = ui, server = server)
 # conjunctivitis
 # TDaP in pregnancy
 # HPV
+# remove non-unique entries in drugs.rds
+# switch allergy list to unique medication names without stength or dosage form information, filter unique 
