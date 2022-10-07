@@ -1,18 +1,18 @@
-# 
-# # load libraries and source files -----------------------------------------
-# 
-# library(lubridate)
-# load("./drugs.Rds")
-# source("./Rx/Rx.R")
-# source("./patient.R")
-# 
-# uti_ui <- fluidPage(
-#     #condition = "input.condition == 'Urinary Tract Infection'",
-#     # header ------------------------------------------------------------------
-#     h2("Uncomplicated Urinary Tract Infection"),
-#     
-#     # Patient Information -----------------------------------------------------    
-#     fluidRow(patient),
+
+# load libraries and source files -----------------------------------------
+
+library(lubridate)
+load("./drugs.Rds")
+source("./Rx/Rx.R")
+source("./patient.R")
+
+conj_ui <- fluidPage(
+    
+    # header ------------------------------------------------------------------
+    h2("Conjunctivitis"),
+
+    # Patient Information -----------------------------------------------------
+    fluidRow(patient),
 #     
 #     # Patient assessment -------------------------------------------------------
 #     fluidRow(
@@ -331,7 +331,7 @@
 #                )
 #         )
 #     )
-# )
+)
 # 
 # uti_server <- function(input, output) {
 #     # allergies selection
